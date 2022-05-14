@@ -1,4 +1,4 @@
-from cgitb import text
+import os
 from tensorflow import keras
 from tensorflow.python.keras import layers
 
@@ -91,9 +91,10 @@ class Generator:
 
 
 if __name__ == "__main__":
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
     generator = Generator()
-    generator.trainModel(epochs=100, batch_size=32)
-    # generator.loadModel()
-    generator.saveModel()
+    # generator.trainModel(epochs=100, batch_size=32)
+    generator.loadModel()
+    # generator.saveModel()
     for i in range(10):
-        print(generator.generate("al", diversity=0.2, length=7))
+        print(generator.generate("al", diversity=10, length=7))

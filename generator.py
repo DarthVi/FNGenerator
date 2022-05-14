@@ -97,4 +97,4 @@ if __name__ == "__main__":
     generator.loadModel()
     # generator.saveModel()
     for i in range(10):
-        print(generator.generate("al", diversity=10, length=7))
+        print("al" + generator.generate("a", diversity=5, length=7))

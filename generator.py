@@ -2,7 +2,6 @@
 # Customized the code from https://livecodestream.dev/post/lstm-based-name-generator-first-dive-into-nlp/
 ##################################
 
-import pandas as pd
 import numpy as np
 import tensorflow as tf
 import time

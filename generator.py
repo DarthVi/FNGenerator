@@ -1,3 +1,7 @@
+##################################
+# Customized the code from https://livecodestream.dev/post/lstm-based-name-generator-first-dive-into-nlp/
+##################################
+
 import pandas as pd
 import numpy as np
 import tensorflow as tf
@@ -111,8 +115,13 @@ class Model:
         print("Finished training - time elapsed:", (end - start) / 60, "min")
 
     def generate(self, gen_amount=10, seed=42):
+        np.random.seed(seed)
+        name_arr = self.c_names.split("\n")
+        random.shuffle(name_arr)
+        shuffled_sequence = "\n".join(name_arr)
         # Start sequence generation from end of the input sequence
-        sequence = self.c_names[-(self.max_sequence_length - 1) :] + "\n"
+        sequence = shuffled_sequence[-(self.max_sequence_length - 1) :] + "\n"
+        # print("Sequence: ", sequence)
 
         new_names = []
         print("{} new names are being generated".format(gen_amount))
@@ -126,7 +135,6 @@ class Model:
             # Sample next char from predicted probabilities
             probs = self.model.predict(x, verbose=0)[0]
             probs /= probs.sum()
-            np.random.seed(seed)
             next_idx = np.random.choice(len(probs), p=probs)
             next_char = self.idx2char[next_idx]
             sequence = sequence[1:] + next_char
@@ -148,6 +156,8 @@ class Model:
                 if 0 == (len(new_names) % (gen_amount / 10)):
                     print("Generated {}".format(len(new_names)))
 
+                # print(gen_name)
+
         return new_names
 
 
@@ -158,4 +168,7 @@ if __name__ == "__main__":
     # model.train()
     # model.saveModel()
     model.loadModel()
-    print(model.generate(seed=10))
+    new_words = model.generate(gen_amount=50, seed=20)
+    with open("new_names.txt", "w") as newf:
+        for word in new_words:
+            newf.write(word + "\n")

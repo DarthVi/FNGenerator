@@ -10,6 +10,7 @@ import numpy as np
 import random
 import pygad
 import string
+import math
 
 alphabet = string.ascii_lowercase + "'"
 vowels = ["a", "e", "i", "o", "u"]
@@ -84,11 +85,13 @@ def get_random_solutions(num, solutions, seed=42):
 
 
 initial_pop = get_initial_population("names.txt")
+pop_length, _ = initial_pop.shape
+num_parents_mating = math.floor(0.35 * pop_length)
 
 ga_instance = pygad.GA(
-    num_generations=10,
+    num_generations=50,
     fitness_func=fitness_function_factory(length_bias=0),
-    num_parents_mating=10,
+    num_parents_mating=num_parents_mating,
     mutation_type="adaptive",
     initial_population=initial_pop,
     crossover_type="single_point",

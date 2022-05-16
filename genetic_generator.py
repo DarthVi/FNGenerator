@@ -84,10 +84,11 @@ def get_random_solutions(num, solutions, seed=42):
     return words
 
 
-def write_to_disk(names, filename="new_names_genetic.txt"):
+def write_new_names_to_disk(names, oldnames, filename="new_names_genetic.txt"):
     with open(filename, "w") as f:
         for name in names:
-            f.write(name + "\n")
+            if not name in oldnames:
+                f.write(name + "\n")
 
 
 initial_pop = get_initial_population("names.txt")
@@ -109,4 +110,5 @@ ga_instance = pygad.GA(
 
 ga_instance.run()
 sols = get_random_solutions(200, ga_instance.population)
-write_to_disk(sols)
+old_names = read_data("names.txt")
+write_new_names_to_disk(sols, old_names)

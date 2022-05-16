@@ -4,7 +4,7 @@
 # Maybe don't make the rule too rigid, apply probabilities or soft constraints.
 # Maybe use a wheighted function?
 
-# Use roulette wheel + fitness function for parents selection, than apply crossing over and mutation.
+# Use fitness function for parents selection, than apply crossing over and mutation.
 # Execute for n-generations
 import numpy as np
 import random
@@ -60,12 +60,12 @@ def read_data(filename):
 
 
 def convert_string_to_integers(s):
-    removed_zeros = filter(lambda i: i != 0, s)
-    return [ord(c) for c in removed_zeros]
+    return [ord(c) for c in s]
 
 
 def convert_integers_to_string(i):
-    return "".join([chr(v) for v in i])
+    removed_zeros = filter(lambda i: i != 0, i)
+    return "".join([chr(v) for v in removed_zeros])
 
 
 def get_initial_population(filename):
@@ -84,22 +84,29 @@ def get_random_solutions(num, solutions, seed=42):
     return words
 
 
+def write_to_disk(names, filename="new_names_genetic.txt"):
+    with open(filename, "w") as f:
+        for name in names:
+            f.write(name + "\n")
+
+
 initial_pop = get_initial_population("names.txt")
 pop_length, _ = initial_pop.shape
-num_parents_mating = math.floor(0.35 * pop_length)
+num_parents_mating = math.floor(0.75 * pop_length)
 
 ga_instance = pygad.GA(
-    num_generations=50,
+    num_generations=3,
     fitness_func=fitness_function_factory(length_bias=0),
     num_parents_mating=num_parents_mating,
-    mutation_type="adaptive",
+    mutation_type="random",
+    mutation_probability=0.15,
     initial_population=initial_pop,
     crossover_type="single_point",
     crossover_probability=0.7,
-    mutation_percent_genes=(12, 8),
+    # mutation_percent_genes=(12, 8),
     gene_type=int,
 )
 
 ga_instance.run()
-sols = get_random_solutions(10, ga_instance.population)
-print("\n".join(sols))
+sols = get_random_solutions(200, ga_instance.population)
+write_to_disk(sols)

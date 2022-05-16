@@ -1,7 +1,7 @@
 # Fantasy Name Generator: a collection of experiments
 
 This is a collection of experiments about generating new fantasy names.
-Currently there are two approach used here:
+Currently there are two approaches used here:
 
 1. RNN using a character-based LSTM (Long Short Term Memory), by customizing the code from https://livecodestream.dev/post/lstm-based-name-generator-first-dive-into-nlp/
 2. an approach based on genetic algorithm with an existing initial population
